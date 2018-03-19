@@ -7,7 +7,7 @@ Example configuration.yaml entry:
 
 google_keep:
   username: 'this_is_my_username@gmail.com'
-  password: 'this is my Google App password'
+  password: 'this_is_my_Google_App_password'
 
 With this custom component loaded, a new service named google_keep.add_to_list
 is available. This service data call has two inputs: 'title' and 'items', where
