@@ -21,7 +21,7 @@ import logging
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
 
-REQUIREMENTS = ['gkeepapi==0.10.4']
+REQUIREMENTS = ['gkeepapi==0.10.5']
 
 _LOGGER = logging.getLogger(__name__)
 
