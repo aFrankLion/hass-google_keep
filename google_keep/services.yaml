@@ -3,7 +3,7 @@
 add_to_list:
   description: Add items to a Google Keep list.
   fields:
-    list_name:
+    title:
       description: Title of the Google Keep list to create or update
       example: 'Grocery'
     items:
