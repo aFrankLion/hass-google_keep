@@ -1,11 +1,11 @@
 # google_keep\services.yaml
 
 add_to_list:
-  description: Add items to a Google Keep list.
+  description: Add things to a Google Keep list.
   fields:
     title:
       description: Title of the Google Keep list to create or update
       example: 'Grocery'
-    items:
-      description: Item(s) to add to the list
+    things:
+      description: Things(s) to add to the list
       example: 'spinach and mushrooms'

@@ -10,10 +10,10 @@ google_keep:
   password: 'this_is_my_Google_App_password'
 
 With this custom component loaded, a new service named google_keep.add_to_list
-is available. This service data call has two inputs: 'title' and 'items', where
-'title' is the title of the Google Keep list, and 'items' is a either a list of
-items, or a string. A string input for 'items' is parsed for multiple items
-separated by 'and' and/or commas.
+is available. This service data call has two inputs: 'title' and 'things', where
+'title' is the title of the Google Keep list, and 'things' is a either a list of
+things, or a string. A string input for 'things' is parsed for multiple things
+separated by 'and'.
 """
 
 import gkeepapi  # https://github.com/kiwiz/gkeepapi
@@ -42,8 +42,8 @@ CONFIG_SCHEMA = vol.Schema({
 
 
 # Service constants and validation
-SERVICE_LIST_NAME = 'title'  # Title of the Google Keep list to create or update, string
-SERVICE_LIST_ITEM = 'items'  # Item(s) to add to the list
+SERVICE_LIST_NAME = 'title'   # Title of the Google Keep list to create or update, string
+SERVICE_LIST_ITEM = 'things'  # Things(s) to add to the list
 
 SERVICE_LIST_SCHEMA = vol.Schema({
     vol.Optional(SERVICE_LIST_NAME): cv.string,
@@ -69,13 +69,13 @@ def setup(hass, config):
         return False
 
     def add_to_list(call):
-        """Add items to a Google Keep list."""
+        """Add things to a Google Keep list."""
 
         list_name = call.data.get(SERVICE_LIST_NAME, default_list_name)
-        items = call.data.get(SERVICE_LIST_ITEM)
+        things = call.data.get(SERVICE_LIST_ITEM)
 
-        # Split any items in the list separated by ' and '
-        items = [x for item in items for x in item.split(' and ')]
+        # Split any things in the list separated by ' and '
+        things = [x for thing in things for x in thing.split(' and ')]
 
         # Sync with Google servers
         keep.sync()
@@ -89,20 +89,20 @@ def setup(hass, config):
             _LOGGER.info("List with name {} not found on Keep. Creating new list.".format(list_name))
             list_to_update = keep.createList(list_name)
 
-        _LOGGER.info("Items to add: {}".format(items))
-        # For each item,
-        for item in items:
-            # ...is the item already on the list?
-            for old_item in list_to_update.items:
-                # Compare the new item to each existing item
-                if old_item.text.lower() == item:
-                    # Uncheck the item if it is already on the list.
-                    old_item.checked = False
+        _LOGGER.info("Things to add: {}".format(things))
+        # For each thing,
+        for thing in things:
+            # ...is the thing already on the list?
+            for old_thing in list_to_update.items:
+                # Compare the new thing to each existing thing
+                if old_thing.text.lower() == thing:
+                    # Uncheck the thing if it is already on the list.
+                    old_thing.checked = False
                     break
-            # If the item is not already on the list,
+            # If the thing is not already on the list,
             else:
-                # ...add the item to the list, unchecked.
-                list_to_update.add(item, False)
+                # ...add the thing to the list, unchecked.
+                list_to_update.add(thing, False)
 
         # Sync with Google servers
         keep.sync()

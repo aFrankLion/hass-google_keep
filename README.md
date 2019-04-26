@@ -17,13 +17,13 @@ google_keep:
 This component relies on [gkeepapi](https://github.com/kiwiz/gkeepapi), an unofficial client for the Google Keep API.
 
 ## Usage
-The original intended use of this component was to restore the capability of Google Assistant to add items to Google Keep lists.
+The original intended use of this component was to restore the capability of Google Assistant to add things to Google Keep lists.
 I accomplish this with a combination of this custom component running on Home Assistant and [IFTTT](https://ifttt.com/).
 
 ### Home Assistant service
 With this custom component loaded, a new service named `google_keep.add_to_list` is available.
-This service call has two data inputs: `title` and `items`, where `title` is the title of the Google Keep list to update, and `items` is a either a list or string of items to add to the list.
-A string input for `items` is parsed for multiple items separated by 'and' and/or commas.
+This service call has two data inputs: `title` and `things`, where `title` is the title of the Google Keep list to update, and `things` is a either a list or string of things to add to the list.
+A string input for `things` is parsed for multiple things separated by 'and' and/or commas.
 
 Here is an example of using the service in an automation to add batteries for smart home devices to a list titled "Home Supplies":
 ```yaml
@@ -40,19 +40,19 @@ automation:
       service: google_keep.add_to_list
       data_template:
         title: 'Home Supplies'
-        items: 'Batteries for {{ trigger.to_state.name }}.'
+        things: 'Batteries for {{ trigger.to_state.name }}.'
 ```
 
-### IFTTT Template
-A combination of the [Google Assistant](https://ifttt.com/google_assistant) trigger and the [Webhooks](https://ifttt.com/maker_webhooks) action is used to call the new Home Assistant service via Google Assistant.
+### IFTTT applet and Home Assistant automation
+A combination of the [Google Assistant](https://ifttt.com/google_assistant) trigger and the [Webhooks](https://ifttt.com/maker_webhooks) action is used to trigger the new Home Assistant service via Google Assistant.
 One IFTTT applet must be made per Google Keep list of interest, with the list name (e.g., 'Grocery' in the example below) hardcoded into the applet.
 
 **IF**: Google Assistant/Say a phrase with a text ingredient  
-*What do you want to say?*: Add $ to the grocery list  
-*What do you want the Assistant to say in response?*: Okay, adding $ to your grocery list
+*What do you want to say?*: `Add $ to the grocery list`
+*What do you want the Assistant to say in response?*: `Okay, adding $ to your grocery list`
 
 **THEN**: Webhooks/Make a web request  
-*URL*: https://thisismyhassurl.org/api/services/google_keep/add_to_list?api_password=this_is_my_hass_api_password  
-*Method*: POST  
-*Content Type*: application/json  
-*Body*: { "title":"Grocery", "items":"{{TextField}}" }
+*URL*: `https://thisismyhassurl.org/api/webhook/ABCXYZ123456`
+*Method*: `POST`
+*Content Type*: `application/json`
+*Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
