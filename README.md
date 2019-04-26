@@ -2,7 +2,7 @@
 Custom component for [Home Assistant](https://home-assistant.io/) to enable adding to and updating lists on [Google Keep](https://keep.google.com/).
 
 ## Installation
-Add the `google_keep.py` file to the `custom_components` folder in your Home Assistant configuration directory, and add the `google_keep` component to your `configuration.yaml` file.
+Add the `google_keep` folder and its contents to the `custom_components` folder in your Home Assistant configuration directory, and add the `google_keep` component to your `configuration.yaml` file.
 
 ### Example configuration.yaml entry
 ```yaml
