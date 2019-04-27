@@ -56,3 +56,18 @@ One IFTTT applet must be made per Google Keep list of interest, with the list na
 - *Method*: `POST`
 - *Content Type*: `application/json`
 - *Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
+
+```yaml
+automation:
+  - alias: Google Keep list update
+    trigger:
+      platform: event
+      event_type: ifttt_webhook_received
+      event_data:
+        action: call_service
+    action:
+      service_template: '{{ trigger.event.data.service }}'
+      data_template:
+        title: '{{ trigger.event.data.title }}'
+        things: '{{ trigger.event.data.things }}'
+```
