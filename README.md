@@ -46,6 +46,7 @@ automation:
 ### IFTTT applet and Home Assistant automation
 A combination of the [Google Assistant](https://ifttt.com/google_assistant) trigger and the [Webhooks](https://ifttt.com/maker_webhooks) action is used to trigger the new Home Assistant service via Google Assistant.
 One IFTTT applet must be made per Google Keep list of interest, with the list name (e.g., 'Grocery' in the example below) hardcoded into the applet.
+For example:
 
 **IF**: Google Assistant/Say a phrase with a text ingredient  
 - *What do you want to say?*: `Add $ to the grocery list`
@@ -56,6 +57,8 @@ One IFTTT applet must be made per Google Keep list of interest, with the list na
 - *Method*: `POST`
 - *Content Type*: `application/json`
 - *Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
+
+A Home Assistant automation to receive and process Google Assistant inputs via IFTTT can have the form:
 
 ```yaml
 automation:
