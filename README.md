@@ -48,11 +48,11 @@ A combination of the [Google Assistant](https://ifttt.com/google_assistant) trig
 One IFTTT applet must be made per Google Keep list of interest, with the list name (e.g., 'Grocery' in the example below) hardcoded into the applet.
 
 **IF**: Google Assistant/Say a phrase with a text ingredient  
-*What do you want to say?*: `Add $ to the grocery list`
-*What do you want the Assistant to say in response?*: `Okay, adding $ to your grocery list`
+- *What do you want to say?*: `Add $ to the grocery list`
+- *What do you want the Assistant to say in response?*: `Okay, adding $ to your grocery list`
 
 **THEN**: Webhooks/Make a web request  
-*URL*: `https://thisismyhassurl.org/api/webhook/ABCXYZ123456`
-*Method*: `POST`
-*Content Type*: `application/json`
-*Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
+- *URL*: `https://thisismyhassurl.org/api/webhook/ABCXYZ123456`
+- *Method*: `POST`
+- *Content Type*: `application/json`
+- *Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
