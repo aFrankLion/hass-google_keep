@@ -16,12 +16,13 @@ things, or a string. A string input for 'things' is parsed for multiple things
 separated by 'and'.
 """
 
-import gkeepapi  # https://github.com/kiwiz/gkeepapi
+import asyncio
 import logging
+
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
 
-REQUIREMENTS = ['gkeepapi==0.10.7']
+from homeassistant.core import callback
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -40,7 +41,6 @@ CONFIG_SCHEMA = vol.Schema({
     }),
 }, extra=vol.ALLOW_EXTRA)
 
-
 # Service constants and validation
 SERVICE_LIST_NAME = 'title'   # Title of the Google Keep list to create or update, string
 SERVICE_LIST_ITEM = 'things'  # Things(s) to add to the list
@@ -51,8 +51,11 @@ SERVICE_LIST_SCHEMA = vol.Schema({
 })
 
 
-def setup(hass, config):
-    """Setup the Google Keep domain."""
+@asyncio.coroutine
+def async_setup(hass, config):
+    """Setup the google_keep component."""
+
+    import gkeepapi
 
     config = config.get(DOMAIN)
 
@@ -68,6 +71,7 @@ def setup(hass, config):
         _LOGGER.error("Google Keep login failed.")
         return False
 
+    @callback
     def add_to_list(call):
         """Add things to a Google Keep list."""
 
@@ -109,7 +113,7 @@ def setup(hass, config):
 
 
     # Register the service google_keep.add_to_list with Home Assistant.
-    hass.services.register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
+    hass.services.async_register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
 
     # Return boolean to indicate successful initialization.
     return True
