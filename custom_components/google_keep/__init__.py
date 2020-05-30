@@ -16,7 +16,6 @@ things, or a string. A string input for 'things' is parsed for multiple things
 separated by 'and'.
 """
 
-import asyncio
 import logging
 
 import voluptuous as vol
@@ -51,8 +50,7 @@ SERVICE_LIST_SCHEMA = vol.Schema({
 })
 
 
-@asyncio.coroutine
-def async_setup(hass, config):
+def setup(hass, config):
     """Setup the google_keep component."""
 
     import gkeepapi
@@ -71,7 +69,6 @@ def async_setup(hass, config):
         _LOGGER.error("Google Keep login failed.")
         return False
 
-    @callback
     def add_to_list(call):
         """Add things to a Google Keep list."""
 
@@ -113,7 +110,7 @@ def async_setup(hass, config):
 
 
     # Register the service google_keep.add_to_list with Home Assistant.
-    hass.services.async_register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
+    hass.services.register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
 
     # Return boolean to indicate successful initialization.
     return True
