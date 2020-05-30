@@ -4,5 +4,5 @@
   "documentation": "https://github.com/aFrankLion/hass-google_keep",
   "dependencies": [],
   "codeowners": ["@aFrankLion"],
-  "requirements": ["gkeepapi"]
+  "requirements": ["gkeepapi==0.11.15"]
 }
