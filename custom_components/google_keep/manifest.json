@@ -3,6 +3,7 @@
   "name": "Google Keep",
   "documentation": "https://github.com/aFrankLion/hass-google_keep",
   "dependencies": [],
+  "version": "0.1.0",
   "codeowners": ["@aFrankLion"],
-  "requirements": ["gkeepapi==0.11.16"]
+  "requirements": ["gkeepapi==0.13.4"]
 }
