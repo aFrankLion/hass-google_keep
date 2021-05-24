@@ -45,7 +45,7 @@ automation:
         things: 'Batteries for {{ trigger.to_state.name }}.'
 ```
 
-### Sync Shopping List
+#### Sync Shopping List
 If the Home Assistant Shopping List integration is enabled, you can use this service to synchronize your google keep list into the home assistant shopping list.
 This service call has just one data input: `title` that is the Google Keep list to sync.
 
@@ -85,6 +85,7 @@ automation:
       - service: google_keep.sync_shopping_list
         data:
           title: 'Home Supplies'
+```
 
 ### IFTTT applet and Home Assistant automation
 A combination of the [Google Assistant](https://ifttt.com/google_assistant) trigger and the [Webhooks](https://ifttt.com/maker_webhooks) action is used to trigger the new Home Assistant service via Google Assistant.
