@@ -124,10 +124,7 @@ def setup(hass, config):
         for _, g in groupby(google_keep_list_items, key=lambda item: item["text"]):
             group = list(g)
             checked = [item for item in group if not item["checked"]]
-            _LOGGER.info("checked is {}".format(checked))
-            _LOGGER.info("group is {}".format(group))
             thing = checked[0] if checked else group[0]
-            _LOGGER.info("thing with text {} and checked {} filtered from google keep".format(thing["text"], thing["checked"]))
             google_keep_distinct_items.append(thing)
 
         google_keep_set = set([item["text"] for item in google_keep_distinct_items])
@@ -139,18 +136,16 @@ def setup(hass, config):
         items_to_add = [item for item in google_keep_distinct_items if item["text"] in elements_to_add]
         for item in items_to_add:
             if not item["checked"]:
-                _LOGGER.info("items to add {} not found on shopping list. Creating new item with {} and {}.".format(item, item["text"], item["checked"]))
                 hass.services.call("shopping_list", 'add_item', {"name": item["text"]}, True)
-                # hass.services.call("shopping_list", 'incomplete_item', {"name": item["text"]}, True)
 
         items_to_update = [item for item in google_keep_distinct_items if item["text"] in elements_to_check]
         for item in items_to_update:
             if item["checked"]:
-                _LOGGER.info("items to update {} on shopping list. Updating existing item and checked.".format(item))
-                hass.services.call("shopping_list", 'complete_item', {"name": item["text"]}, True)
+                shopping_list_service = "complete_item"
             else:
-                _LOGGER.info("items to update {} on shopping list. Updating existing item.".format(item))
-                hass.services.call("shopping_list", 'incomplete_item', {"name": item["text"]}, True)
+                shopping_list_service = "incomplete_item"
+
+            hass.services.call("shopping_list", shopping_list_service, {"name": item["text"]}, True)
 
     def _get_or_create_list_name_(list_name):
         """ Find the target list amongst all the Keep notes/lists """
@@ -173,6 +168,6 @@ def setup(hass, config):
     SHOPPING_LIST = hass.data[SHOPPING_LIST_DOMAIN]
     if SHOPPING_LIST:
         hass.services.register(DOMAIN, 'sync_shopping_list', sync_shopping_list, schema=SERVICE_LIST_NAME_SCHEMA)
-r
+
     # Return boolean to indicate successful initialization.
     return True
