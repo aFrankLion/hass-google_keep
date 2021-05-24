@@ -112,5 +112,12 @@ def setup(hass, config):
     # Register the service google_keep.add_to_list with Home Assistant.
     hass.services.register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
 
+    # Register the service google_keep.sync_shopping_list with Home Assistant.
+    SHOPPING_LIST = hass.data[SHOPPING_LIST_DOMAIN]
+    if SHOPPING_LIST:
+        hass.services.register(DOMAIN, 'sync_shopping_list', sync_shopping_list, schema=SERVICE_LIST_NAME_SCHEMA)
+
+        hass.states.set(f"sensor.shopping_list", len(SHOPPING_LIST.items))
+
     # Return boolean to indicate successful initialization.
     return True
