@@ -21,7 +21,9 @@ The original intended use of this component was to restore the capability of Goo
 I accomplish this with a combination of this custom component running on Home Assistant and [IFTTT](https://ifttt.com/).
 
 ### Home Assistant service
-With this custom component loaded, a new service named `google_keep.add_to_list` is available.
+With this custom component loaded, two services named `google_keep.add_to_list` and `google_keep.sync_shopping_list` are available.
+
+#### Add to List
 This service call has two data inputs: `title` and `things`, where `title` is the title of the Google Keep list to update, and `things` is a either a list or string of things to add to the list.
 A string input for `things` is parsed for multiple things separated by 'and' and/or commas.
 
@@ -38,9 +40,51 @@ automation:
         below: 20
     action:
       service: google_keep.add_to_list
-      data_template:
+      data:
         title: 'Home Supplies'
         things: 'Batteries for {{ trigger.to_state.name }}.'
+```
+
+#### Sync Shopping List
+If the Home Assistant Shopping List integration is enabled, you can use this service to synchronize your google keep list into the home assistant shopping list.
+This service call has just one data input: `title` that is the Google Keep list to sync.
+
+Here is an example of using the service in an automation to sync the list after adding an items:
+```yaml
+automation:
+  - alias: Low Battery Notification
+    trigger:
+      - platform: numeric_state
+        entity_id:
+        - sensor.front_door_battery
+        - sensor.hallway_smoke_co_alarm_battery
+        - sensor.bedroom_sensor_battery
+        below: 20
+    action:
+      - service: google_keep.add_to_list
+        data:
+          title: 'Home Supplies'
+          things: 'Batteries for {{ trigger.to_state.name }}.'
+      - delay:
+        seconds: 10
+      - service: google_keep.sync_shopping_list
+        data:
+          title: 'Home Supplies'
+```
+
+Another approach could be to schedule the sync once in a while:
+```yaml
+automation:
+  - alias: Sync google keep
+    trigger:
+      - platform: time_pattern
+        hours: "07"
+        minutes: 0
+        seconds: 0
+    action:
+      - service: google_keep.sync_shopping_list
+        data:
+          title: 'Home Supplies'
 ```
 
 ### IFTTT applet and Home Assistant automation
