@@ -93,7 +93,7 @@ def setup(hass, config):
             # ...is the thing already on the list?
             for old_thing in list_to_update.items:
                 # Compare the new thing to each existing thing
-                if old_thing.text.lower() == thing:
+                if old_thing.text.lower() == thing.lower():
                     # Uncheck the thing if it is already on the list.
                     old_thing.checked = False
                     break
