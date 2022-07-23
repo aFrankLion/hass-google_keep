@@ -2,11 +2,11 @@
 Custom component for [Home Assistant](https://home-assistant.io/) to enable adding to and updating lists on [Google Keep](https://keep.google.com/).
 
 ## Installation
-Add the `google_keep` folder and its contents to the `custom_components` folder in your Home Assistant configuration directory, and add the `google_keep` component to your `configuration.yaml` file.
+Add the `gkeep` folder and its contents to the `custom_components` folder in your Home Assistant configuration directory, and add the `gkeep` component to your `configuration.yaml` file.
 
 ### Example configuration.yaml entry
 ```yaml
-google_keep:
+gkeep:
   username: "this_is_my_username@gmail.com"
   password: "this_is_my_Google_App_password"
   list_name: "Grocery"
@@ -21,7 +21,7 @@ The original intended use of this component was to restore the capability of Goo
 I accomplish this with a combination of this custom component running on Home Assistant and [IFTTT](https://ifttt.com/).
 
 ### Home Assistant service
-With this custom component loaded, two services named `google_keep.add_to_list` and `google_keep.sync_shopping_list` are available.
+With this custom component loaded, two services named `gkeep.add_to_list` and `gkeep.sync_shopping_list` are available.
 
 #### Add to List
 This service call has two data inputs: `title` and `things`, where `title` is the title of the Google Keep list to update, and `things` is a either a list or string of things to add to the list.
@@ -39,7 +39,7 @@ automation:
         - sensor.bedroom_sensor_battery
         below: 20
     action:
-      service: google_keep.add_to_list
+      service: gkeep.add_to_list
       data:
         title: 'Home Supplies'
         things: 'Batteries for {{ trigger.to_state.name }}.'
@@ -61,13 +61,13 @@ automation:
         - sensor.bedroom_sensor_battery
         below: 20
     action:
-      - service: google_keep.add_to_list
+      - service: gkeep.add_to_list
         data:
           title: 'Home Supplies'
           things: 'Batteries for {{ trigger.to_state.name }}.'
       - delay:
         seconds: 10
-      - service: google_keep.sync_shopping_list
+      - service: gkeep.sync_shopping_list
         data:
           title: 'Home Supplies'
 ```
@@ -82,7 +82,7 @@ automation:
         minutes: 0
         seconds: 0
     action:
-      - service: google_keep.sync_shopping_list
+      - service: gkeep.sync_shopping_list
         data:
           title: 'Home Supplies'
 ```
@@ -100,7 +100,7 @@ For example:
 - *URL*: `https://thisismyhassurl.org/api/webhook/ABCXYZ123456`
 - *Method*: `POST`
 - *Content Type*: `application/json`
-- *Body*: `{ "action":"call_service", "service":"google_keep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
+- *Body*: `{ "action":"call_service", "service":"gkeep.add_to_list", "title":"Grocery", "things":"{{TextField}}" }`
 
 A Home Assistant automation to receive and process Google Assistant inputs via IFTTT can have the form:
 

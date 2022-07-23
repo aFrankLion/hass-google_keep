@@ -1,4 +1,4 @@
-# google_keep\services.yaml
+# gkeep\services.yaml
 
 add_to_list:
   description: Add things to a Google Keep list.
