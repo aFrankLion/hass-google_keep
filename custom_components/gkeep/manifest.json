@@ -1,5 +1,5 @@
 {
-  "domain": "google_keep",
+  "domain": "gkeep",
   "name": "Google Keep",
   "documentation": "https://github.com/aFrankLion/hass-google_keep",
   "dependencies": [],
