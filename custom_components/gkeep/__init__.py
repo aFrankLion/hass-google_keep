@@ -5,7 +5,7 @@ Google Keep API (https://github.com/kiwiz/gkeepapi).
 
 Example configuration.yaml entry:
 
-google_keep:
+gkeep:
   username: 'this_is_my_username@gmail.com'
   password: 'this_is_my_Google_App_password'
 
@@ -26,7 +26,7 @@ from homeassistant.core import callback
 _LOGGER = logging.getLogger(__name__)
 
 # Domain and component constants and validation
-DOMAIN = "google_keep"
+DOMAIN = "gkeep"
 SHOPPING_LIST_DOMAIN = "shopping_list"
 CONF_USERNAME = 'username'    # Google account username
 CONF_PASSWORD = 'password'    # Google App password, https://myaccount.google.com/apppasswords
