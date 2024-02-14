@@ -17,6 +17,7 @@ separated by 'and'.
 """
 
 import logging
+import keyring
 
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
@@ -66,12 +67,26 @@ def setup(hass, config):
     default_list_name = config.get(CONF_LIST_NAME)
 
     keep = gkeepapi.Keep()
+    token = keyring.get_password("google-keep-token", username)
+    logged_in = False
 
-    # Attempt to login
-    login_success = keep.login(username, password)
-    if not login_success:
-        _LOGGER.error("Google Keep login failed.")
-        return False
+    # Use an existing master token if one exists
+    if token:
+        _LOGGER.info("Authenticating with token")
+        try:
+            keep.resume(username, token)
+            logged_in = True
+            _LOGGER.info("Success")
+        except gkeepapi.exception.LoginException:
+            _LOGGER.error("Invalid token")
+
+    # Otherwise, use credentials and login
+    if not logged_in:
+        # Attempt to login
+        login_success = keep.login(username, password)
+        if not login_success:
+            _LOGGER.error("Google Keep login failed.")
+            return False
 
     def add_to_list(call):
         """Add things to a Google Keep list."""
@@ -102,6 +117,36 @@ def setup(hass, config):
                 # ...add the thing to the list, unchecked.
                 list_to_update.add(thing, False)
 
+        # Sync with Google servers
+        keep.sync()
+
+    def delete_first_in_list(call):
+        """Delete the first item in a Google Keep list."""
+        list_name = call.data.get(SERVICE_LIST_NAME, default_list_name)
+
+        # Sync with Google servers
+        keep.sync()
+
+        list_to_update = _get_or_create_list_name_(list_name)
+
+        if (len(list_to_update.items)>0):
+            list_to_update.items[0].delete()
+        
+        # Sync with Google servers
+        keep.sync()
+
+    def delete_entire_list(call):
+        """Delete the first item in a Google Keep list."""
+        list_name = call.data.get(SERVICE_LIST_NAME, default_list_name)
+
+        # Sync with Google servers
+        keep.sync()
+
+        list_to_update = _get_or_create_list_name_(list_name)
+
+        for item in list_to_update.items:
+            item.delete()
+        
         # Sync with Google servers
         keep.sync()
     
@@ -163,6 +208,8 @@ def setup(hass, config):
 
     # Register the service google_keep.add_to_list with Home Assistant.
     hass.services.register(DOMAIN, 'add_to_list', add_to_list, schema=SERVICE_LIST_SCHEMA)
+    hass.services.register(DOMAIN, 'delete_first_in_list', delete_first_in_list, schema=SERVICE_LIST_NAME_SCHEMA)
+    hass.services.register(DOMAIN, 'delete_entire_list', delete_entire_list, schema=SERVICE_LIST_NAME_SCHEMA)
 
     # Register the service google_keep.sync_shopping_list with Home Assistant.
     SHOPPING_LIST = hass.data.get(SHOPPING_LIST_DOMAIN)
