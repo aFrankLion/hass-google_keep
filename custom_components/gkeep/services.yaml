@@ -10,6 +10,20 @@ add_to_list:
       description: Things(s) to add to the list
       example: 'spinach and mushrooms'
 
+delete_first_in_list:
+  description: Delete the first item in a Google Keep list.
+  fields:
+    title:
+      description: Title of the Google Keep list to delete
+      example: 'Grocery'
+
+delete_entire_list:
+  description: Delete all the items in a Google Keep list.
+  fields:
+    title:
+      description: Title of the Google Keep list to delete
+      example: 'Grocery'
+
 sync_shopping_list:
   description: Sync shopping list with a Google Keep list.
   fields:
